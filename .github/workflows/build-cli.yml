@@ -281,7 +281,7 @@ jobs:
             { build_prefix: "bit", artifact_prefix: "", readable: "commercial license" }
           ]
     runs-on: ${{ matrix.os.distro }}
-    container: node:20-alpine3.22
+    container: node:${{ needs.setup.outputs.node_version }}-alpine3.22
     needs: setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
@@ -303,13 +303,6 @@ jobs:
           echo "LOWER_RUNNER_OS=$(echo $RUNNER_OS | awk '{print tolower($0)}')" >> $GITHUB_ENV
           echo "SHORT_RUNNER_OS=$(echo $RUNNER_OS | awk '{print substr($0, 1, 3)}' | \
             awk '{print tolower($0)}')" >> $GITHUB_ENV
-
-      - name: Set up Node
-        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
-        with:
-          cache: 'npm'
-          cache-dependency-path: '**/package-lock.json'
-          node-version: ${{ env._NODE_VERSION }}
 
       - name: Install
         run: npm ci
