@@ -305,10 +305,10 @@ jobs:
             awk '{print tolower($0)}')" >> $GITHUB_ENV
 
       - name: Pre-Install
-        run: git nodejs alpine-sdk
+        run: apk add git nodejs alpine-sdk
 
       - name: Pre-Install2
-        run: pm install -g patch-package husky webpack webpack-cli cross-env pkg
+        run: npm install -g patch-package husky webpack webpack-cli cross-env pkg
 
       - name: Install
         run: npm ci && npm link webpack
