@@ -281,7 +281,7 @@ jobs:
             { build_prefix: "bit", artifact_prefix: "", readable: "commercial license" }
           ]
     runs-on: ${{ matrix.os.distro }}
-    container: node:${{ needs.setup.outputs.node_version }}-alpine3.22
+    container: node:22.18-alpine3.22
     needs: setup
     env:
       _PACKAGE_VERSION: ${{ needs.setup.outputs.package_version }}
@@ -304,8 +304,14 @@ jobs:
           echo "SHORT_RUNNER_OS=$(echo $RUNNER_OS | awk '{print substr($0, 1, 3)}' | \
             awk '{print tolower($0)}')" >> $GITHUB_ENV
 
+      - name: Pre-Install
+        run: git nodejs alpine-sdk
+
+      - name: Pre-Install2
+        run: pm install -g patch-package husky webpack webpack-cli cross-env pkg
+
       - name: Install
-        run: npm ci
+        run: npm ci && npm link webpack
         working-directory: ./
 
       - name: Download SDK Artifacts
